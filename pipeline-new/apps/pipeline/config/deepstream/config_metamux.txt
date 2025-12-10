@@ -1,0 +1,5 @@
+[property]
+config-file-path=/mnt/ssd/csi_pipeline/config/ds_config/config_metamux.txt
+
+[src-stream-ids]
+src-ids=0;1

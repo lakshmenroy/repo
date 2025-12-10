@@ -1,0 +1,26 @@
+# CSI Configuration
+# Parameters for Clean Street Index computation
+
+# Road segmentation model
+road_model:
+  class_ids: [0, 1, 2]  # Background, Road, Non-road
+  class_labels: ["background", "road", "non-road"]
+
+# Garbage segmentation model
+garbage_model:
+  class_ids: [0, 1, 2]  # Background, Clean, Dirty
+  class_labels: ["background", "clean", "dirty"]
+
+# CSI computation parameters
+n_bins: 20
+linsp_start: 0.0
+linsp_stop: 1.0
+percentage_dirty_road: 0.3
+smooth: true
+clip_csi: true
+
+# Garbage type coefficients
+garbage_type_coefficients:
+  plastic: 1.0
+  paper: 0.8
+  organic: 0.6

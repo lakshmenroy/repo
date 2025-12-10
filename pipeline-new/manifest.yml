@@ -1,0 +1,17 @@
+version: "1.0.0"
+components:
+  pipeline:
+    version: "1.0.0"
+    commit_sha: ""
+  ota-client:              
+    version: "1.0.0"
+    commit_sha: ""
+  csi:
+    version: "1.0.0"
+    commit_sha: ""
+  nozzlenet:
+    version: "1.0.0"
+    commit_sha: ""
+  kernel-patches:
+    version: "1.0.0"
+    commit_sha: ""

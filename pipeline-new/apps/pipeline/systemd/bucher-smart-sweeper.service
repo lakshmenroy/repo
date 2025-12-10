@@ -1,0 +1,35 @@
+[Unit]
+Description=SmartAssist Pipeline Service
+After=network.target bucher-d3-camera-init.service nvargus-daemon.service
+Requires=bucher-d3-camera-init.service
+Wants=nvargus-daemon.service
+
+[Service]
+Type=notify
+User=root
+Group=root
+WorkingDirectory=/opt/smartassist/apps/pipeline/src
+Environment="SSWP_RUN_MODE=SYSTEMD_NOTIFY_SERVICE"
+Environment="GST_DEBUG_DUMP_DOT_DIR=/mnt/syslogic_sd_card"
+Environment="PYTHONPATH=/opt/smartassist/apps/pipeline/src"
+ExecStart=/usr/bin/python3 /opt/smartassist/apps/pipeline/src/main.py
+Restart=on-failure
+RestartSec=10
+StartLimitBurst=5
+StartLimitInterval=300
+TimeoutStartSec=60
+TimeoutStopSec=30
+WatchdogSec=30
+NotifyAccess=main
+
+# Resource limits
+MemoryLimit=4G
+CPUQuota=400%
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=smartassist-pipeline
+
+[Install]
+WantedBy=multi-user.target

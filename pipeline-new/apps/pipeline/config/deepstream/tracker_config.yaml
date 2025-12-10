@@ -1,0 +1,24 @@
+%YAML:1.0
+# NvDCF Tracker Configuration
+
+NvDCF:
+  # [General]
+  useUniqueID: 0      # Use unique ID when re-ID
+  maxTargetsPerStream: 99  # Max targets to track per stream
+  
+  # [Feature extraction]
+  useColorNames: 1    # Use color names
+  useHistograms: 1    # Use histograms
+  
+  # [Detection]
+  minDetectorConfidence: 0.4  # Min detector confidence
+  
+  # [Tracker]
+  minTrackerConfidence: 0.2   # Min tracker confidence
+  minIou: 0.1                 # Min IOU for matching
+  maxShadowTrackingAge: 30    # Max frames to keep lost tracks
+  probationAge: 3             # Frames before track becomes active
+  earlyTerminationAge: 1      # Early termination for low confidence
+  
+  # [ReID]
+  useReID: 0

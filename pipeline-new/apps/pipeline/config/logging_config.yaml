@@ -1,0 +1,91 @@
+---
+# Data logging settings for pipeline
+
+logging_settings:
+   - logging_mode: 2  # 0=off, 1=minimal, 2=full
+   - max_log_duration: 1200  # seconds (20 minutes)
+   - logged_data_dir: /mnt/syslogic_sd_card/upload/  # Output directory
+   - overwrite_first_log: 0  # Not implemented yet
+
+camera_info:
+   - front:
+      - id: 43-0021
+   - back:
+      - id: 23-0021
+   - right_nozzle:
+      - id: 33-0021
+   - left_nozzle:
+      - id: 13-0021
+   - camera_type: D3
+
+device_info:
+   - device_name: syslogic_
+
+vehicle_info:
+   - serial_number: SN217841
+   - vehicle_type: V65
+
+# Signal columns for CSV logging
+signal_settings:
+   can_signals:
+      - "time"
+      - "avifileindex"
+      - "Longitude"
+      - "Latitude"
+      - "Altitude"
+      - "ActiveSatellites"
+      - "Heading"
+      - "Nozzle1"
+      - "Nozzle2"
+      - "SideBrush1"
+      - "SideBrush2"
+      - "BrushCurrent"
+      - "SideBrush1Extension" 
+      - "SideBrush2Extension"
+      - "SideBrush1Retraction"
+      - "SideBrush2Retraction"
+      - "Nozzle1WaterSpray"
+      - "Nozzle2WaterSpray"
+      - "SideBrush1WaterSpray"
+      - "SideBrush2WaterSpray"
+      - "Engine_or_FanSpeed"
+      - "SuctionFan"
+      - "WorkLight1"
+      - "WorkLight2"
+      - "NozzleGapOpening"
+      - "NozzleGapClosing"
+      - "Pause"
+      - "auto_speed"
+      - "cleaning_unit"
+
+   camera_signals:
+      - "time"
+      - "nozzle_clear"
+      - "nozzle_blocked"
+      - "check_nozzle"
+      - "action_object"
+      - "gravel"
+      - "confidence"
+      - "sm_current_state"
+
+   csi_signals:
+      - "time"
+      - "discrete_csi_front"
+      - "absolute_csi_front"
+      - "relative_csi_front"
+      - "discrete_csi_rear"
+      - "absolute_csi_rear"
+      - "relative_csi_rear"
+
+   pm_signals:
+      - "time"
+      - "s1_pm25"
+      - "s1_pm10"
+      - "s2_pm25"
+      - "s2_pm10"
+      - "s3_pm25"
+      - "s3_pm10"
+      - "s4_pm25"
+      - "s4_pm10"
+      - "s5_pm25"
+      - "s5_pm10"

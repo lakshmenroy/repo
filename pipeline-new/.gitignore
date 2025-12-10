@@ -1,0 +1,79 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+venv/
+ENV/
+env/
+.venv
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+*.log
+
+# Output files
+*.mp4
+*.h264
+*.h265
+*.avi
+*.mkv
+*.png
+*.jpg
+*.jpeg
+output_frames/
+videos/
+test_images/
+
+# DeepStream
+*.dot
+*.svg
+graphs/
+
+# Models (tracked via Git LFS)
+*.engine
+*.plan
+*.trt
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+output.*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Project specific
+test*
+*testing*
+debug_*
+archive/

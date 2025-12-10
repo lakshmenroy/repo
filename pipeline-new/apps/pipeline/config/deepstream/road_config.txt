@@ -1,0 +1,16 @@
+# Road Segmentation Model Configuration
+
+[property]
+gpu-id=0
+net-scale-factor=0.003921568627451
+offsets=103.939;116.779;123.68
+model-color-format=0
+model-engine-file=/mnt/ssd/csi_pipeline/models/road_segmentation/road_model.engine
+infer-dims=3;512;512
+batch-size=2
+network-mode=0
+num-detected-classes=3
+interval=0
+gie-unique-id=2
+network-type=100
+segmentation-threshold=0.5
