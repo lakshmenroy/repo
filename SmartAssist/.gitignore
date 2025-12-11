@@ -1,0 +1,119 @@
+# SmartAssist .gitignore
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+venv/
+ENV/
+env/
+.venv
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Jupyter Notebooks
+.ipynb_checkpoints
+*.ipynb
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.hypothesis/
+
+# Logs
+*.log
+logs/
+*.out
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+*~
+
+# Model files (managed by Git LFS)
+# Uncomment if NOT using Git LFS:
+# *.plan
+# *.engine
+# *.onnx
+# *.uff
+# *.weights
+
+# Large media files
+# *.mp4
+# *.avi
+# *.mkv
+
+# GStreamer debug files
+*.dot
+*.png
+
+# System files
+*.pid
+*.sock
+
+# Configuration overrides (keep templates only)
+config/local_*.yaml
+config/local_*.json
+config/*_local.yaml
+config/*_local.json
+
+# Data and logs directories
+/data/
+/logs/
+/output/
+/upload/
+
+# Deployment artifacts
+*.deb
+*.rpm
+*.tar.gz
+*.zip
+
+# Documentation build
+docs/_build/
+docs/.doctrees/
+
+# Ignore sensitive data
+*.key
+*.pem
+*.crt
+secrets/
+credentials/
+
+# Ignore runtime generated files
+status.json
+camera_init_results_*.json
+
+# Ignore large datasets
+datasets/
+videos/test_*.mp4
+videos/debug_*.mp4

@@ -1,0 +1,35 @@
+# SmartAssist Monorepo Manifest
+# Version tracking for all components
+
+version: "1.0.0"
+build_date: "2025-12-11"
+commit_hash: "AUTO_GENERATED"
+
+components:
+  pipeline:
+    version: "1.0.0"
+    path: "pipeline/"
+    entry_point: "pipeline/src/main.py"
+  
+  nozzlenet_model:
+    version: "2.0.253"
+    path: "models/nozzlenet/"
+    model_file: "/mnt/ssd/model_repository/nozzlenet-v2/V253/model.plan"
+  
+  csi_model:
+    version: "1.0.0"
+    path: "models/csi/"
+  
+  can_server:
+    version: "1.0.0"
+    path: "services/can-server/"
+
+hardware:
+  platform: "NVIDIA Jetson Orin"
+  cameras: 4
+  can_buses: 2
+
+software:
+  jetpack: "6.0+"
+  deepstream: "6.4+"
+  python: "3.8+"

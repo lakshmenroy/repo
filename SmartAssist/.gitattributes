@@ -1,0 +1,48 @@
+# SmartAssist Git LFS Configuration
+# Large File Storage for model files and videos
+
+# TensorRT model files
+*.plan filter=lfs diff=lfs merge=lfs -text
+*.engine filter=lfs diff=lfs merge=lfs -text
+
+# ONNX models
+*.onnx filter=lfs diff=lfs merge=lfs -text
+
+# UFF models
+*.uff filter=lfs diff=lfs merge=lfs -text
+
+# Model weights
+*.weights filter=lfs diff=lfs merge=lfs -text
+*.pth filter=lfs diff=lfs merge=lfs -text
+*.pt filter=lfs diff=lfs merge=lfs -text
+*.h5 filter=lfs diff=lfs merge=lfs -text
+
+# Video files
+*.mp4 filter=lfs diff=lfs merge=lfs -text
+*.avi filter=lfs diff=lfs merge=lfs -text
+*.mkv filter=lfs diff=lfs merge=lfs -text
+*.mov filter=lfs diff=lfs merge=lfs -text
+
+# Large datasets
+*.tar.gz filter=lfs diff=lfs merge=lfs -text
+*.zip filter=lfs diff=lfs merge=lfs -text
+
+# Ensure text files use LF line endings
+*.py text eol=lf
+*.sh text eol=lf
+*.yaml text eol=lf
+*.yml text eol=lf
+*.json text eol=lf
+*.md text eol=lf
+*.txt text eol=lf
+*.cfg text eol=lf
+*.conf text eol=lf
+
+# Service files
+*.service text eol=lf
+
+# Binary files
+*.so binary
+*.a binary
+*.dll binary
+*.dylib binary
