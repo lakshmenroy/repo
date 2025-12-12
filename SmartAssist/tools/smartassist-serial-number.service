@@ -1,0 +1,56 @@
+# SmartAssist Serial Number Service
+# Reads vehicle serial number from CAN bus and updates configuration
+#
+# The actual script is in tools/set_serial_number.py
+# This service file makes it run automatically at boot
+#
+# Install:
+#   sudo cp smartassist-serial-number.service /etc/systemd/system/
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable smartassist-serial-number
+#   sudo systemctl start smartassist-serial-number
+#
+# Check status:
+#   systemctl status smartassist-serial-number
+#   cat /opt/smartassist/pipeline/config/logging_config.yaml
+
+[Unit]
+Description=SmartAssist Serial Number Collection from CAN
+Documentation=https://github.com/your-org/SmartAssist
+After=smartassist-can-init.service smartassist-can-server.service
+Requires=smartassist-can-init.service
+Wants=smartassist-can-server.service
+Before=smartassist-pipeline.service
+
+[Service]
+Type=oneshot
+User=root
+Group=root
+
+# Working directory
+WorkingDirectory=/opt/smartassist/tools
+
+# Environment
+Environment="PYTHONUNBUFFERED=1"
+Environment="PATH=/usr/bin:/usr/local/bin"
+
+# Execute serial number script
+ExecStart=/usr/bin/python3 /opt/smartassist/tools/set_serial_number.py
+RemainAfterExit=yes
+
+# Restart policy (retry if fails, then give up)
+Restart=on-failure
+RestartSec=10
+StartLimitBurst=5
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=smartassist-serial
+
+# Security
+PrivateTmp=no
+NoNewPrivileges=false
+
+[Install]
+WantedBy=multi-user.target

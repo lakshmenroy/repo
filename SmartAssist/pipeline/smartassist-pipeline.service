@@ -1,0 +1,72 @@
+# SmartAssist Pipeline Service
+# Main AI inference application for garbage detection and nozzle control
+#
+# Install:
+#   sudo cp smartassist-pipeline.service /etc/systemd/system/
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable smartassist-pipeline
+#   sudo systemctl start smartassist-pipeline
+#
+# Check status:
+#   systemctl status smartassist-pipeline
+#   journalctl -u smartassist-pipeline -f
+
+[Unit]
+Description=SmartAssist AI Pipeline (Garbage Detection & Nozzle Control)
+Documentation=https://github.com/your-org/SmartAssist
+After=smartassist-camera-init.service smartassist-can-server.service smartassist-time-sync.service
+Requires=smartassist-camera-init.service smartassist-can-server.service
+Wants=smartassist-time-sync.service smartassist-serial-number.service
+
+[Service]
+Type=notify
+User=root
+Group=root
+
+# Working directory
+WorkingDirectory=/opt/smartassist/pipeline
+
+# Environment
+Environment="PYTHONUNBUFFERED=1"
+Environment="PATH=/usr/bin:/usr/local/bin:/usr/local/cuda/bin"
+Environment="LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH"
+Environment="SMARTASSIST_ROOT=/opt/smartassist"
+Environment="GST_DEBUG=3"
+
+# Execute main pipeline
+ExecStart=/usr/bin/python3 -u /opt/smartassist/pipeline/src/main.py
+
+# Notify systemd when ready (requires Type=notify)
+# The pipeline should call sd_notify when fully initialized
+NotifyAccess=main
+
+# Restart policy - always restart on failure
+Restart=always
+RestartSec=10
+StartLimitBurst=5
+StartLimitIntervalSec=300
+
+# Give pipeline time to save data before SIGKILL
+TimeoutStopSec=30
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=smartassist-pipeline
+
+# Resource limits
+LimitNOFILE=65536
+MemoryMax=6G
+CPUQuota=400%
+
+# Security
+PrivateTmp=no
+NoNewPrivileges=false
+# Need access to video devices, CAN, GPIO
+SupplementaryGroups=video gpio
+
+# Watchdog (optional - pipeline can send keepalive)
+WatchdogSec=60s
+
+[Install]
+WantedBy=multi-user.target
