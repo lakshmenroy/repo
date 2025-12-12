@@ -99,6 +99,19 @@ if [ -d "$SMARTASSIST_ROOT/tools" ]; then
         echo -e "${GREEN}✓ Camera Init service installed${NC}"
     fi
 fi
+# Install serial number service file
+echo ""
+echo -e "${BLUE}Installing serial number service...${NC}"
+if [ -f "$SMARTASSIST_ROOT/tools/smartassist-serial-number.service" ]; then
+    cp "$SMARTASSIST_ROOT/tools/smartassist-serial-number.service" "$SYSTEMD_DIR/"
+    echo -e "${GREEN}✓ Serial Number service installed${NC}"
+fi
+
+# The enable section should include:
+enable_service "smartassist-serial-number.service"
+
+# The summary should list:
+echo "  • smartassist-serial-number.service"
 
 # Install pipeline service file (if exists)
 echo ""
