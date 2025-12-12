@@ -13,12 +13,8 @@ import gi
 gi.require_version('Gst', '1.0')
 from gi.repository import Gst
 
-from ...pipeline.elements import make_element
-from ...pipeline.linking import (
-    link_static_srcpad_pad_to_request_sinkpad,
-    get_static_pad,
-    get_request_pad
-)
+from pipeline.pipeline.elements import make_element
+from pipeline.pipeline.linking import link_static_srcpad_pad_to_request_sinkpad
 from .probes import compute_csi_buffer_probe
 
 

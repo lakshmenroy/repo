@@ -11,7 +11,7 @@ import time
 import threading
 
 
-class CanClient:
+class CANClient:
     """
     CAN Client for communicating with CAN server
     Uses Unix domain socket for IPC

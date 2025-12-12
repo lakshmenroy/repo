@@ -10,6 +10,7 @@ gi.require_version('Gst', '1.0')
 from gi.repository import Gst
 import sys
 from datetime import datetime
+from ...models.csi.bins import create_csiprobebin
 
 from .elements import make_element
 from .linking import (
@@ -20,132 +21,6 @@ from .linking import (
 )
 from ..utils.helpers import modify_deepstream_config_files
 
-
-def create_csiprobebin(app_context, flip_method):
-    """
-    Create CSI probe bin for Clean Street Index computation
-    
-    Pipeline:
-    nvstreammux (road) -> queue -> road_nvinfer ->
-    nvstreammux (garbage) -> queue -> garbage_nvinfer ->
-    nvsegvisual -> queue (with CSI probe) -> nvvideoconvert -> capsfilter -> queue
-    
-    :param app_context: Application context
-    :param flip_method: Video flip method (0-7)
-    :return: GStreamer bin or None
-    
-    VERIFIED: Exact logic from original
-    """
-    logger = app_context.get_value('app_context_v2').logger
-    logger.debug('Creating CSI probe bin...')
-    
-    # Create bin
-    csi_probe_bin = Gst.Bin.new('csi_probe_bin')
-    csi_probe_bin.set_property('message-forward', True)
-    
-    # Get config paths
-    config_paths_dict = app_context.get_value('config_paths')
-    road_config_path = config_paths_dict.get('csi_road', {}).get('path')
-    garbage_config_path = config_paths_dict.get('csi_garbage', {}).get('path')
-    
-    # Create elements for road inference
-    nvstreammux_road_pgie = make_element('nvstreammux', 'nvstreammux_road_pgie')
-    queue_pre_road_pgie = make_element('queue', 'queue_pre_road_pgie')
-    road_nvinfer_engine = make_element('nvinfer', 'road_nvinfer_engine')
-    
-    # Create elements for garbage inference
-    nvstreammux_garbage_pgie = make_element('nvstreammux', 'nvstreammux_garbage_pgie')
-    queue_pre_garbage_pgie = make_element('queue', 'queue_pre_garbage_pgie')
-    garbage_nvinfer_engine = make_element('nvinfer', 'garbage_nvinfer_engine')
-    
-    # Create visualization and conversion elements
-    segvisual = make_element('nvsegvisual', 'nvsegvisual')
-    queue_post_garbage_pgie = make_element('queue', 'queue_post_garbage_pgie')
-    rgba_to_nv12_convert = make_element('nvvideoconvert', 'rgba_to_nv12_convert')
-    rgba_to_nv12_capsfilter = make_element('capsfilter', 'rgba_to_nv12_capsfilter')
-    output_queue = make_element('queue', 'output_queue')
-    
-    # Configure elements
-    if road_config_path:
-        road_nvinfer_engine.set_property('config-file-path', road_config_path)
-    if garbage_config_path:
-        garbage_nvinfer_engine.set_property('config-file-path', garbage_config_path)
-    
-    # Configure road muxer
-    nvstreammux_road_pgie.set_property('batch-size', 2)
-    nvstreammux_road_pgie.set_property('live-source', 1)
-    nvstreammux_road_pgie.set_property('batched-push-timeout', 100000000)
-    nvstreammux_road_pgie.set_property('width', 960)
-    nvstreammux_road_pgie.set_property('height', 540)
-    nvstreammux_road_pgie.set_property('sync-inputs', True)
-    
-    # Configure garbage muxer
-    nvstreammux_garbage_pgie.set_property('batch-size', 2)
-    nvstreammux_garbage_pgie.set_property('live-source', 1)
-    nvstreammux_garbage_pgie.set_property('batched-push-timeout', 100000000)
-    nvstreammux_garbage_pgie.set_property('width', 960)
-    nvstreammux_garbage_pgie.set_property('height', 540)
-    
-    # Configure segvisual
-    segvisual.set_property('batch-size', 2)
-    segvisual.set_property('width', 960)
-    segvisual.set_property('height', 540)
-    
-    # Configure capsfilter
-    rgba_to_nv12_capsfilter.set_property('caps', 
-        Gst.Caps.from_string('video/x-raw(memory:NVMM), format=(string)NV12'))
-    
-    # Add elements to bin
-    elements = [
-        nvstreammux_road_pgie, queue_pre_road_pgie, road_nvinfer_engine,
-        nvstreammux_garbage_pgie, queue_pre_garbage_pgie, garbage_nvinfer_engine,
-        segvisual, queue_post_garbage_pgie, rgba_to_nv12_convert,
-        rgba_to_nv12_capsfilter, output_queue
-    ]
-    
-    for element in elements:
-        if not element:
-            logger.error('Failed to create element in CSI bin')
-            return None
-        Gst.Bin.add(csi_probe_bin, element)
-    
-    # Add ghost pads for input (two sinks for front/rear cameras)
-    csi_probe_bin.add_pad(Gst.GhostPad.new('sink_0', get_request_pad(nvstreammux_road_pgie, 'sink_0')))
-    csi_probe_bin.add_pad(Gst.GhostPad.new('sink_1', get_request_pad(nvstreammux_road_pgie, 'sink_1')))
-    
-    # Link road inference path
-    nvstreammux_road_pgie.link(queue_pre_road_pgie)
-    queue_pre_road_pgie.link(road_nvinfer_engine)
-    
-    # Link road output to garbage muxer inputs
-    link_static_srcpad_pad_to_request_sinkpad(road_nvinfer_engine, nvstreammux_garbage_pgie, sink_pad_index=0)
-    
-    # Link garbage inference path
-    nvstreammux_garbage_pgie.link(queue_pre_garbage_pgie)
-    queue_pre_garbage_pgie.link(garbage_nvinfer_engine)
-    garbage_nvinfer_engine.link(segvisual)
-    segvisual.link(queue_post_garbage_pgie)
-    
-    # Add CSI computation probe HERE (critical placement!)
-    try:
-        # Import probe function
-        from ...models.csi.src.probes import compute_csi_buffer_probe
-        queue_post_garbage_pgie_pad = get_static_pad(queue_post_garbage_pgie, 'src')
-        queue_post_garbage_pgie_pad.add_probe(Gst.PadProbeType.BUFFER, compute_csi_buffer_probe, 0)
-        logger.debug('CSI computation probe attached')
-    except ImportError:
-        logger.warning('CSI module not available, skipping CSI probe')
-    
-    # Continue linking
-    queue_post_garbage_pgie.link(rgba_to_nv12_convert)
-    rgba_to_nv12_convert.link(rgba_to_nv12_capsfilter)
-    rgba_to_nv12_capsfilter.link(output_queue)
-    
-    # Add ghost pad for output
-    csi_probe_bin.add_pad(Gst.GhostPad.new('src_0', get_static_pad(output_queue, 'src')))
-    
-    logger.debug('CSI probe bin created')
-    return csi_probe_bin
 
 
 def create_hr_output_bin(app_context):

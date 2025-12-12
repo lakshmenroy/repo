@@ -8,7 +8,6 @@ This is the SmartStateMachine used by the nozzlenet probe to control:
 - Action object detection
 
 VERIFIED: Exact functionality from pipeline/can_state_machine.py
-Location: This should be imported as: from ...can.state_machine import SmartStateMachine
 But for module consistency, we provide it here as well.
 """
 from datetime import datetime
