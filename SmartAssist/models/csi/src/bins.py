@@ -17,6 +17,7 @@ from .probes import compute_csi_buffer_probe
 from pipeline.pipeline import make_element
 from pipeline.pipeline import link_static_srcpad_pad_to_request_sinkpad
 from pipeline.utils.paths import get_deepstream_config_path
+from pipeline.utils.paths import CSI_ROAD_CONFIG, CSI_GARBAGE_CONFIG
 
 def create_csiprobebin(app_context, flip_method):
     """
@@ -100,18 +101,24 @@ def create_csiprobebin(app_context, flip_method):
     
     # Configure inference engines - get paths from app_context
 
-    road_config_path = get_deepstream_config_path('csi', 'road_config.txt')
-    garbage_config_path = get_deepstream_config_path('csi', 'garbage_config.txt')
-    
-    # Try to get from app_context config_paths
+
+    # Try to get from app_context config_paths first
     config_paths_dict = app_context.get_value('config_paths')
     if config_paths_dict:
         road_config = config_paths_dict.get('road_segmentation', {})
         garbage_config = config_paths_dict.get('garbage_segmentation', {})
         if road_config.get('path'):
             road_config_path = road_config['path']
+        else:
+            road_config_path = CSI_ROAD_CONFIG  # Use paths.py constant
         if garbage_config.get('path'):
             garbage_config_path = garbage_config['path']
+        else:
+            garbage_config_path = CSI_GARBAGE_CONFIG  # Use paths.py constant
+    else:
+        # Fallback to constants from paths.py
+        road_config_path = CSI_ROAD_CONFIG
+        garbage_config_path = CSI_GARBAGE_CONFIG
     
     road_nvinfer_engine.set_property('config-file-path', road_config_path)
     garbage_nvinfer_engine.set_property('config-file-path', garbage_config_path)
