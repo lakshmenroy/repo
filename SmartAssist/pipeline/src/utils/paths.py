@@ -1,7 +1,12 @@
 """
-Path Management Utilities
+Path Management Utilities - FIXED VERSION
 Auto-detects SmartAssist repository root and builds all paths relative to it
 Works anywhere the repo is deployed (dev machine, edge device, CI/CD)
+
+FIXES:
+- Corrected CAN_DBC_DIR to point to pipeline/dbc/
+- Added DBC_DIR as alias
+- Validated all path construction
 """
 import os
 
@@ -41,6 +46,10 @@ PIPELINE_SRC = os.path.join(PIPELINE_ROOT, "src")
 PIPELINE_CONFIG = os.path.join(PIPELINE_ROOT, "config")
 PIPELINE_DEEPSTREAM_CONFIGS = os.path.join(PIPELINE_ROOT, "deepstream_configs")
 
+# DBC files location - FIXED!
+DBC_DIR = os.path.join(PIPELINE_ROOT, "dbc")  # ← CORRECTED
+CAN_DBC_DIR = DBC_DIR  # Alias for backward compatibility
+
 # Model paths
 MODELS_ROOT = os.path.join(REPO_ROOT, "models")
 
@@ -58,12 +67,14 @@ NOZZLENET_DEEPSTREAM_CONFIGS = os.path.join(NOZZLENET_ROOT, "deepstream_configs"
 
 # Shared config paths
 CONFIG_ROOT = os.path.join(REPO_ROOT, "config")
-CAN_DBC_DIR = os.path.join(CONFIG_ROOT, "can")
 
 # Output paths (external - not in repo)
 OUTPUT_ROOT = "/mnt/syslogic_sd_card/upload"
 CSV_OUTPUT_DIR = os.path.join(OUTPUT_ROOT, "csv")
 VIDEO_OUTPUT_DIR = os.path.join(OUTPUT_ROOT, "video")
+
+# Tools directory
+TOOLS_DIR = os.path.join(REPO_ROOT, "tools")
 
 
 def get_model_path(model_name, version, filename):
@@ -96,7 +107,7 @@ def get_dbc_path(dbc_filename):
     Returns:
         str: Absolute path to DBC file
     """
-    return os.path.join(CAN_DBC_DIR, dbc_filename)
+    return os.path.join(DBC_DIR, dbc_filename)  # ← FIXED to use DBC_DIR
 
 
 def get_config_path(config_filename):
@@ -135,7 +146,7 @@ def get_deepstream_config_path(model_name, config_filename):
 
 # Print paths on import (useful for debugging)
 if __name__ == "__main__":
-    print("SmartAssist Path Configuration")
+    print("SmartAssist Path Configuration (FIXED VERSION)")
     print("=" * 60)
     print(f"Repository Root: {REPO_ROOT}")
     print(f"Pipeline Root:   {PIPELINE_ROOT}")
@@ -143,6 +154,8 @@ if __name__ == "__main__":
     print(f"CSI Root:        {CSI_ROOT}")
     print(f"Nozzlenet Root:  {NOZZLENET_ROOT}")
     print(f"Config Root:     {CONFIG_ROOT}")
+    print(f"DBC Dir:         {DBC_DIR}")  # ← FIXED
     print(f"CAN DBC Dir:     {CAN_DBC_DIR}")
+    print(f"Tools Dir:       {TOOLS_DIR}")
     print(f"CSV Output:      {CSV_OUTPUT_DIR}")
     print("=" * 60)
