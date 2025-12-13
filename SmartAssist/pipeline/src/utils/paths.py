@@ -56,7 +56,7 @@ MODELS_ROOT = os.path.join(REPO_ROOT, "models")
 # CSI model
 CSI_ROOT = os.path.join(MODELS_ROOT, "csi")
 CSI_SRC = os.path.join(CSI_ROOT, "src")
-CSI_WEIGHTS = os.path.join(CSI_ROOT, "weights/v1.0.0")
+CSI_WEIGHTS = os.path.join(CSI_ROOT, "weights/v2.0.0")
 CSI_DEEPSTREAM_CONFIGS = os.path.join(CSI_ROOT, "deepstream_configs")
 # CSI model configs
 CSI_ROAD_CONFIG = os.path.join(CSI_DEEPSTREAM_CONFIGS, "road_config.txt")

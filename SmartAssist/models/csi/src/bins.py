@@ -16,8 +16,8 @@ from gi.repository import Gst
 from .probes import compute_csi_buffer_probe
 from pipeline.pipeline import make_element
 from pipeline.pipeline import link_static_srcpad_pad_to_request_sinkpad
-from pipeline.utils.paths import get_deepstream_config_path
-from pipeline.utils.paths import CSI_ROAD_CONFIG, CSI_GARBAGE_CONFIG
+from pipeline.utils.paths import get_deepstream_config_path, CSI_ROAD_CONFIG, CSI_GARBAGE_CONFIG
+
 
 def create_csiprobebin(app_context, flip_method):
     """

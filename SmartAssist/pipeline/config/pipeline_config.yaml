@@ -18,18 +18,22 @@ ds_configs:
   # Nozzlenet inference configuration
   inference:
     path: "models/nozzlenet/deepstream_configs/infer_config.txt"
-    model-engine-file: "models/nozzlenet/weights/v2.5.3/ssd_resnet18_epoch_060-nozzlenet-batch-size-1.plan"
+    model-engine-file: "models/nozzlenet/weights/v2.5.3/model.plan"
     labelfile-path: "models/nozzlenet/weights/v2.5.3/labels.txt"
     infer-dims: "3;480;480"
     input-tensor-from-meta: "0"
   
   # Metadata mux configuration
+  # metamux:
+  #   path: "/mnt/ssd/csi_pipeline/config/ds_config/config_metamux.txt"
   metamux:
-    path: "/mnt/ssd/csi_pipeline/config/ds_config/config_metamux.txt"
+    path: "pipeline/deepstream_configs/config_metamux.txt"
   
   # Tracker configuration
+  # tracker:
+  #   path: "/mnt/ssd/workspace/ganindu_ws/scripts/nvDCF_tracker_config.yml"
   tracker:
-    path: "/mnt/ssd/workspace/ganindu_ws/scripts/nvDCF_tracker_config.yml"
+    path: "/mnt/ssd/SmartAssist/pipeline/deepstream_configs/tracker_config.yml"
 
 # Source override parameters (for testing with video files)
 # Set override: true to use file instead of camera
