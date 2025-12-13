@@ -22,7 +22,6 @@ Type=oneshot
 # Execute de-initialization script
 ExecStart=/opt/smartassist/services/can-init/scripts/can-deinit.sh
 RemainAfterExit=yes
-
 # Logging
 StandardOutput=journal
 StandardError=journal
