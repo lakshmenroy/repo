@@ -28,8 +28,8 @@ class Configuration:
             try:
                 config_file = get_config_path("logging_config.yaml")
             except:
-                # Fallback to old hardcoded path
-                config_file = '/mnt/ssd/csi_pipeline/config/logging_config.yaml'
+                # Fallback to hardcoded path
+                config_file = '/mnt/ssd/SmartAssist/pipeline/config/pipeline_config.yaml'
         
         with open(config_file, 'r') as file:
             self.config = yaml.safe_load(file)

@@ -13,7 +13,6 @@ from pathlib import Path
 # Smart path detection
 from .utils.paths import get_repo_root, get_config_path
 
-
 # Global FPS tracking variables
 start_time = time.time()
 frame_count = 0
@@ -87,10 +86,9 @@ class Config:
         if config_file is None:
             # Try monorepo location first
             try:
-                config_file = get_config_path("bucher_camera_on_boot_config.json")
-            except:
-                # Fallback to old location
-                config_file = "/mnt/ssd/csi_pipeline/config/bucher_camera_on_boot_config.json"
+                
+                config_ = Config(get_config_path('camera_config.json'))
+                # config_file = get_config_path("bucher_camera_on_boot_config.json")
         
         self.config_file = config_file
         

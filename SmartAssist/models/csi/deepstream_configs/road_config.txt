@@ -48,7 +48,7 @@ net-scale-factor=0.017352074
 ## Color format required by the model (0=RGB, 1=BGR, 2=GRAY)
 model-color-format=0 
 ## Absolute pathname of the pre-generated serialized engine file for the mode
-model-engine-file=/mnt/ssd/csi_pipeline/models/csi2.0/mw_csi2.0_road_softmax.engine
+model-engine-file=/mnt/ssd/SmartAssist/models/csi/weights/v2.0.0/road_segmentation.engine
 ## Defines the dimensional parameters for inference (channels;height:width)  
 infer-dims=3;416;608  
 ## Number of frames or objects to be inferred together in a batch

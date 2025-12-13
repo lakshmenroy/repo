@@ -30,7 +30,7 @@ Environment="PYTHONUNBUFFERED=1"
 Environment="PATH=/usr/bin:/usr/local/bin"
 
 # Execute
-ExecStart=/usr/bin/python3 -m src.main
+ExecStart=//usr/bin/python3 /mnt/ssd/SmartAssist/pipeline/src/main.py  
 
 # Restart policy
 Restart=always
